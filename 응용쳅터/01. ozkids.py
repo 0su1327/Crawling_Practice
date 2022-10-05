@@ -41,24 +41,37 @@ for i in range(5010,5020) :
 
 wb.save(r'D:\WebCrawling\파이썬엑셀다루기\참가자_data.xlsx')
 
-# def func1() :
-#     try:
-#         requestdata = requests.get(f"https://medi.cafe24api.com/api/v2/products/{i}?shop_no=1&cafe24_app_key=KU5HdZg4BVXlfoLDEPu6EC&cafe24_api_version=2022-06-01")
-#     except:
-#         return func2()      
+
+
+
+
+
+list = ['discoveryglobal','ozkiz1',]
+def func1() :
+    try:
+        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{i}?shop_no=1&cafe24_app_key={app_key}&cafe24_api_version=2022-06-01")
+    except:
+        return func2()      
 
     
 
 
-# def func2() :
-#     try:
-#         requestdata = requests.get(f"https://medi.cafe24api.com/api/v2/products/{i}?shop_no=1&cafe24_app_key=KU5HdZg4BVXlfoLDEPu6EC")
+def func2() :
+    try:
+        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{i}?shop_no=1&cafe24_app_key={app_key}")
 
-#     except:
-#         return func3()
+    except:
+        return func3()
 
     
 
 
-# def func3() :
-#     html
+def func3() :
+    try:
+        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{i}?cafe24_app_key={app_key}")
+
+    except:
+        return func3()
+
+def func4() :
+    html

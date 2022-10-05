@@ -14,6 +14,8 @@ row = 2
 #  ozkiz1.com
 #  discoveryglobal
 
+
+# 일단 none 값을 저장 안하는 방식을 찾아봄(어차피 json이 없으면 아무값도 없는 거니까 아무값이나 하나 잡아서 none이 아닐때만 출력)
 for i in range(5010,5030) :
     
     try:
