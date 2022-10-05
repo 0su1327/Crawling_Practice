@@ -34,10 +34,7 @@ def func3() :
     page = requests.get("https://themedicube.co.kr/product/detail.html?product_no=1103&cate_no=466&display_group=2")
     soup = bs(page.text, "html.parser")
 
-    tag1 = soup.find_all('div', class_=['price'][0])
-
-
-
+    return soup
 
 
 # rows = 2  # 2개의 사이트를 저장
@@ -47,31 +44,33 @@ def func3() :
 
 # python은 인터프리터 언어이기 때문에 순서를 잘 생각해야 한다.
 
-arr = [['ozkiz1', 'KU5HdZg4BVXlfoLDEPu6EC'],['nsmall2022','KU5HdZg4BVXlfoLDEPu6EC']]
+arr = [['ozkiz1', 'KU5HdZg4BVXlfoLDEPu6EC'],['nsmall2022','KU5HdZg4BVXlfoLDEPu6EC'],['themedicube','0000']]
 
-#일단 오즈킺즈의 3757과 농심의 3757이 겹치므로 두개만 해보겠다.
+#일단 오즈킺즈의 3757과 농심의 3757이 겹치므로 두개만 해보겠다. + 메디큐브도 html이 파싱되는지 확인해보기
 row = 2
-for i in range(0, 2) :
+for i in range(0, 3) :
     for k in range(3756, 3760) :
         list = arr[i][0]
         app_key=arr[i][1]
 
         requestdata = func1(list, k, app_key)
+        
+        if requestdata.status_code == 200 :
+            jsonData = requestdata.json()
+            for data in jsonData :
+                if jsonData.get(data).get("price") != None :
+                    print(f"{arr[i][0]}의 {k}페이지 입니다.----------------------------------------------")
+                    ws[f'A{row}'] = jsonData.get(data).get("price")
+                    ws[f'C{row}'] = jsonData.get(data).get("product_code")
+                    ws[f'E{row}'] = jsonData.get(data).get("detail_image")
 
-        # if requestdata.status_code == 200 :  ->어차피 func에서 검사하니까 필요 없지 않을까??
-        jsonData = requestdata.json()
-        for data in jsonData :
-            if jsonData.get(data).get("price") != None :
-                print(f"{arr[i][0]}의 {k}페이지 입니다.----------------------------------------------")
-                ws[f'A{row}'] = jsonData.get(data).get("price")
-                ws[f'C{row}'] = jsonData.get(data).get("product_code")
-                ws[f'E{row}'] = jsonData.get(data).get("detail_image")
-
-                row = row + 1
-                    
-                print(data, " : ", jsonData.get(data).get("price"), ", product_code", " : ", jsonData.get(data).get("product_code"), ", image_url : ", jsonData.get(data).get("detail_image"))
-            else :
-                continue
+                    row = row + 1
+                        
+                    print(data, " : ", jsonData.get(data).get("price"), ", product_code", " : ", jsonData.get(data).get("product_code"), ", image_url : ", jsonData.get(data).get("detail_image"))
+                else :
+                    continue
+        else : 
+            print(requestdata)
         
 
 wb.save(r'D:\WebCrawling\파이썬엑셀다루기\참가자_data.xlsx')
