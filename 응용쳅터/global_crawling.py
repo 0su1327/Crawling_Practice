@@ -3,6 +3,20 @@ import json
 import openpyxl
 from bs4 import BeautifulSoup as bs
 
+
+
+
+# import MySqldb
+
+# conn = MySQLdb.connect(
+#     user="imo",
+#     passwd="1234",
+#     host="localhost",
+#     db="Capstone"
+#     # charset="utf-8"
+# )
+
+
 wb = openpyxl.Workbook()
 
 ws = wb.create_sheet('오즈키즈, 농심 크롤링')
@@ -14,20 +28,20 @@ ws['E1'] = 'image_url'
 # func1이 실행되면 shop의 json을 가진 사이트를 파싱
 def func1(list, k, app_key) :
     try:
-        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{k}?shop_no=1&cafe24_app_key={app_key}")
+        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{k}?shop_no=1&cafe24_app_key={app_key}&cafe24_api_version=2022-06-01")
         return requestdata
     except:
-        return func3()      
+        return func2(list, k, app_key)      
 
 
 # func2가 실행되면 cafe의 json을 가진 사이트를 파싱
-# def func2(list, k, app_key) : 
-#     try:
-#         requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{k}?cafe24_app_key={app_key}")
+def func2(list, k, app_key) : 
+    try:
+        requestdata = requests.get(f"https://{list}.cafe24api.com/api/v2/products/{k}?cafe24_app_key={app_key}")
         
-#         return requestdata
-#     except:
-#         return func3()
+        return requestdata
+    except:
+        return func3()
 
 # 모든 function이 실행되지 않으면 어쩔 수 없이 html 전체를 파싱해서 값을 가져오기(ex 메디큐브)
 def func3() :
@@ -44,9 +58,8 @@ def func3() :
 
 # python은 인터프리터 언어이기 때문에 순서를 잘 생각해야 한다.
 
-arr = [['ozkiz1', 'KU5HdZg4BVXlfoLDEPu6EC'],['nsmall2022','KU5HdZg4BVXlfoLDEPu6EC'],['themedicube','0000']]  #DB에서 불러와야함 (DICTIONARY 형태)
+arr = [['ozkiz1', 'KU5HdZg4BVXlfoLDEPu6EC'],['nsmall2022','KU5HdZg4BVXlfoLDEPu6EC'],['themedicube','0000']]  #DB에서 불러와야함 (DICTIONARY 형태로)
 
-# https://mall66.cafe24api.com/api/v2/products/97882?cafe24_app_key=f7kOrfNK8UAn2Z93owrB4C&cafe24_api_version=2022-06-01
 #일단 오즈킺즈의 3757과 농심의 3757이 겹치므로 두개만 해보겠다. + 메디큐브도 html이 파싱되는지 확인해보기  
 # -> 메디큐브의 경우 mod_security 또는 다른 비슷한 서버 시큐리티가 알려진 사용자 봇을 블록 시키기 때문에 html파싱이 안된다..... 어떻게 해야 할까??
 row = 2
